@@ -1,0 +1,15 @@
+version: 2.1
+
+setup: true
+
+orbs:
+  path-filtering: circleci/path-filtering@1.0.0
+
+workflows:
+  setup:
+    jobs:
+      - path-filtering/filter:
+          base-revision: master
+          mapping: |
+            demo-nest-server/.* build-demo-nest-server true apps/demo-nest-server/.circleci/config.yml
+            demo-vue-client/.* build-demo-vue-client true apps/demo-vue-client/.circleci/config.yml

@@ -1,0 +1,98 @@
+version: 2.1
+
+commands:
+  install-dependencies:
+    description: Install dependencies with caching, optionally choose package manager.
+    parameters:
+      pkg-manager:
+        type: enum
+        enum: ['npm', 'pnpm']
+        default: 'npm'
+      cache-version:
+        type: string
+        default: 'v1'
+    steps:
+      - run:
+          name: Check package.json
+          command: <<include(scripts/check-package-json.sh)>>
+      - run:
+          name: Process lockfile
+          command: <<include(scripts/process-lockfile.sh)>>
+      - run
+          name: Ensure package manager
+          environment:
+            PKG_MANAGER: <<parameters.pkg-manager>>
+          command: <<include(scripts/ensure-pkg-manager.sh)>>
+      - restore_cache:
+          keys:
+            - node-deps-{{ arch }}-<<parameters.cache-version>>-{{ .Branch }}-{{ checksum "/tmp/node-project-lock" }}
+      - run:
+          name: Install dependencies
+          environment:
+            PKG_MANAGER: <<parameters.pkg-manager>>
+          command: <<include(scripts/install-dependnecies.sh)>>
+      - when:
+          condition:
+             equal: [npm, <<parameters.pkg-manager>>]
+          steps:
+            - save_cache:
+                key: node-deps-{{ arch }}-<<parameters.cache-version>>-{{ .Branch }}-{{ checksum "/tmp/node-project-lock" }}
+                paths:
+                  - ~/.npm
+      - when:
+          condition:
+             equal: [pnpm, <<parameters.pkg-manager>>]
+          steps:
+            - save_cache:
+                key: node-deps-{{ arch }}-<<parameters.cache-version>>-{{ .Branch }}-{{ checksum "/tmp/node-project-lock" }}
+                paths:
+                  - ~/.pnpm-store
+
+jobs:
+  run-script:
+    description: Run scripts defined inside package.json
+    parameters:
+      node-version:
+        type: string
+        default: 'lts'
+      pkg-manager:
+        type: enum
+        enum: ['npm', 'pnpm']
+        default: 'npm'
+      cache-version:
+        type: string
+        default: 'v1'
+      run-dir:
+        type: string
+        default: '.'
+      script:
+        type: string
+        default: ''
+    docker:
+      - image: cimg/node:<<parameters.node-version>>
+    resource_class: large
+    steps:
+      - checkout
+      - install-dependencies:
+          pkg-manager: <<parameters.pkg-manager>>
+          cache-version: <<parameters.cache-version>>
+      - run:
+          name: Run <<parameters.pkg-manager>> <<parameters.script>>
+          working_directory: <<parameters.run-dir>>
+          environment:
+            PKG_MANAGER: <<parameters.pkg-manager>>
+            SCRIPT: <<parameters.script>>
+          command: <<include(scripts/run-script.sh)>>
+
+workflows:
+  lint:
+    jobs:
+      - run-script:
+          name: lint
+          pkg-manager: pnpm
+          run-dir: apps/demo-nest-server
+          script: lint
+
+
+
+
