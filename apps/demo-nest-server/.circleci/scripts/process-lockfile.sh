@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DEST_FILE="/tmp/node-project-lock"
 
 if [ -f "package-lock.json" ]; then

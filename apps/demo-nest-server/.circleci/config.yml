@@ -1,5 +1,10 @@
 version: 2.1
 
+parameters:
+  build-demo-nest-server:
+    type: boolean
+    default: false
+
 commands:
   install-dependencies:
     description: Install dependencies with caching, optionally choose package manager.
@@ -14,15 +19,15 @@ commands:
     steps:
       - run:
           name: Check package.json
-          command: <<include(scripts/check-package-json.sh)>>
+          command: bash ./apps/demo-nest-server/.circleci/scripts/check-package-json.sh
       - run:
           name: Process lockfile
-          command: <<include(scripts/process-lockfile.sh)>>
-      - run
+          command: bash ./apps/demo-nest-server/.circleci/scripts/process-lockfile.sh
+      - run:
           name: Ensure package manager
           environment:
             PKG_MANAGER: <<parameters.pkg-manager>>
-          command: <<include(scripts/ensure-pkg-manager.sh)>>
+          command: bash ./apps/demo-nest-server/.circleci/scripts/ensure-pkg-manager.sh
       - restore_cache:
           keys:
             - node-deps-{{ arch }}-<<parameters.cache-version>>-{{ .Branch }}-{{ checksum "/tmp/node-project-lock" }}
@@ -30,7 +35,7 @@ commands:
           name: Install dependencies
           environment:
             PKG_MANAGER: <<parameters.pkg-manager>>
-          command: <<include(scripts/install-dependnecies.sh)>>
+          command: bash ./apps/demo-nest-server/.circleci/scripts/install-dependencies.sh
       - when:
           condition:
              equal: [npm, <<parameters.pkg-manager>>]
@@ -62,9 +67,9 @@ jobs:
       cache-version:
         type: string
         default: 'v1'
-      run-dir:
+      package:
         type: string
-        default: '.'
+        default: ''
       script:
         type: string
         default: ''
@@ -78,20 +83,30 @@ jobs:
           cache-version: <<parameters.cache-version>>
       - run:
           name: Run <<parameters.pkg-manager>> <<parameters.script>>
-          working_directory: <<parameters.run-dir>>
           environment:
             PKG_MANAGER: <<parameters.pkg-manager>>
+            PACKAGE: <<parameters.package>>
             SCRIPT: <<parameters.script>>
-          command: <<include(scripts/run-script.sh)>>
+          command: bash ./apps/demo-nest-server/.circleci/scripts/run-script.sh
 
 workflows:
   lint:
+    when: <<pipeline.parameters.build-demo-nest-server>>
     jobs:
       - run-script:
-          name: lint
+          name: Lint
           pkg-manager: pnpm
-          run-dir: apps/demo-nest-server
+          package: demo-nest-server
           script: lint
+  test-unit:
+    when: <<pipeline.parameters.build-demo-nest-server>>
+    jobs:
+      - run-script:
+          name: Unit Tests
+          pkg-manager: pnpm
+          package: demo-nest-server
+          script: test
+
 
 
 

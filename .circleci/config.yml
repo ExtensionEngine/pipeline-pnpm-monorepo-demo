@@ -11,5 +11,5 @@ workflows:
       - path-filtering/filter:
           base-revision: master
           mapping: |
-            demo-nest-server/.* build-demo-nest-server true apps/demo-nest-server/.circleci/config.yml
-            demo-vue-client/.* build-demo-vue-client true apps/demo-vue-client/.circleci/config.yml
+            apps/demo-nest-server/.* build-demo-nest-server true apps/demo-nest-server/.circleci/config.yml
+            apps/demo-vue-client/.* build-demo-vue-client true apps/demo-vue-client/.circleci/config.yml
