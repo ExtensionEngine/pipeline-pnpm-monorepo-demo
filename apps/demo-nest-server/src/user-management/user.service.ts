@@ -2,7 +2,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import { User } from './user.entity';
-import { UserExistsException } from './user-exists.exception';
+import { UserExistsException } from './exceptions/user-exists.exception';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()

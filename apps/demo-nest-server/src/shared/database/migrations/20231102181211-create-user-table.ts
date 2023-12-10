@@ -20,6 +20,7 @@ export class CreateUserTable extends Migration {
         .timestamp('updated_at', { useTz: true })
         .notNullable()
         .defaultTo(knex.fn.now());
+      table.timestamp('deleted_at', { useTz: true }).nullable();
     });
     this.addSql(createUserTable.toQuery());
   }

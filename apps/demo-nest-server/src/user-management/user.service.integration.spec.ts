@@ -6,7 +6,7 @@ import { DatabaseModule } from 'shared/database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import databaseConfig from 'config/database.config';
 import { Role, User } from './user.entity';
-import { UserExistsException } from './user-exists.exception';
+import { UserExistsException } from './exceptions/user-exists.exception';
 
 describe('UserService', () => {
   let module: TestingModule;

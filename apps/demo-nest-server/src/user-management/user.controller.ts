@@ -1,7 +1,7 @@
 import { Body, ConflictException, Controller, Post } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
-import { UserExistsException } from './user-exists.exception';
+import { UserExistsException } from './exceptions/user-exists.exception';
 
 @Controller('users')
 export class UserController {

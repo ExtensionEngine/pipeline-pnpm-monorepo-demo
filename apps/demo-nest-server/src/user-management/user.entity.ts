@@ -1,5 +1,6 @@
 import { Entity, Enum, Property, Unique } from '@mikro-orm/core';
 import { BaseEntity } from 'shared/database/base.entity';
+import { AdminBanException } from './exceptions/admin-ban.exception';
 
 export const Role = {
   ADMIN: 'admin',
@@ -23,11 +24,23 @@ export class User extends BaseEntity {
   @Property()
   lastName: string;
 
+  @Property({ nullable: true })
+  deletedAt: Date;
+
   constructor(email: string, role: Role, firstName: string, lastName: string) {
     super();
     this.email = email;
     this.role = role;
     this.firstName = firstName;
     this.lastName = lastName;
+  }
+
+  isActive() {
+    return !Boolean(this.deletedAt);
+  }
+
+  ban(now: Date) {
+    if (this.role === Role.ADMIN) throw new AdminBanException();
+    this.deletedAt = now;
   }
 }
