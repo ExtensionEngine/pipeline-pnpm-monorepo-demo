@@ -1,6 +1,6 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "moduleDirectories": ["src"],
+  "moduleDirectories": ["node_modules", "src"],
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".integration.spec.ts$",

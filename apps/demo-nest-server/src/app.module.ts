@@ -6,9 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import { DatabaseModule } from 'shared/database/database.module';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { User } from 'user.entity';
 import { HealthController } from 'health.controller';
+import { UserManagementModule } from './user-management/user-management.module';
 
 @Module({
   imports: [
@@ -21,7 +20,7 @@ import { HealthController } from 'health.controller';
       },
     }),
     DatabaseModule.forRoot(),
-    MikroOrmModule.forFeature([User]),
+    UserManagementModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
