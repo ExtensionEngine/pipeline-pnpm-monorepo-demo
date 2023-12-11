@@ -36,7 +36,7 @@ export class User extends BaseEntity {
   }
 
   isActive() {
-    return !Boolean(this.deletedAt);
+    return !this.deletedAt;
   }
 
   ban(now: Date) {
