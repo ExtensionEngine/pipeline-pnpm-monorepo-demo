@@ -1,4 +1,4 @@
-import { AdminBanException } from './exceptions/admin-ban.exception';
+import { CannotBanAdminException } from './exceptions/cannot-ban-admin.exception';
 import { Role, User } from './user.entity';
 
 describe('UserEntity', () => {
@@ -21,6 +21,6 @@ describe('UserEntity', () => {
     const user = new User('test@example.org', Role.ADMIN, 'test', 'test');
     const now = new Date();
 
-    expect(() => user.ban(now)).toThrow(AdminBanException);
+    expect(() => user.ban(now)).toThrow(CannotBanAdminException);
   });
 });

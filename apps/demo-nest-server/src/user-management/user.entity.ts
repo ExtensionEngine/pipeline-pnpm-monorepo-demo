@@ -1,6 +1,6 @@
 import { Entity, Enum, Property, Unique } from '@mikro-orm/core';
 import { BaseEntity } from 'shared/database/base.entity';
-import { AdminBanException } from './exceptions/admin-ban.exception';
+import { CannotBanAdminException } from './exceptions/cannot-ban-admin.exception';
 
 export const Role = {
   ADMIN: 'admin',
@@ -40,7 +40,7 @@ export class User extends BaseEntity {
   }
 
   ban(now: Date) {
-    if (this.role === Role.ADMIN) throw new AdminBanException();
+    if (this.role === Role.ADMIN) throw new CannotBanAdminException();
     this.deletedAt = now;
   }
 }
