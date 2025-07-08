@@ -12,6 +12,6 @@
   "prettier": "@studion/prettier-config",
   "devDependencies": {
     "@studion/prettier-config": "^0.1.0",
-    "prettier": "^3.1.0"
+    "prettier": "^3.6.2"
   }
 }
