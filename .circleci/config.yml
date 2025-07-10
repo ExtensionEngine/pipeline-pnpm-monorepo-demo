@@ -1,0 +1,13 @@
+version: 2.1
+setup: true
+
+orbs:
+  path-filtering: circleci/path-filtering@2.0.1
+
+workflows:
+  setup_and_continue:
+    jobs:
+      - path-filtering/filter:
+          base-revision: master
+          mapping: |
+            apps/demo-nest-server/.* apps/demo-nest-server/.circleci/config.yml
