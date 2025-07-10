@@ -5,8 +5,8 @@ import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
-import { DatabaseModule } from 'shared/database/database.module';
-import { HealthController } from 'health.controller';
+import { DatabaseModule } from './shared/database/database.module';
+import { HealthController } from './health.controller';
 import { UserManagementModule } from './user-management/user-management.module';
 
 @Module({
