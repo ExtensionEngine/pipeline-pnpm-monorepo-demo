@@ -1,5 +1,5 @@
 import { Entity, Enum, Property, Unique } from '@mikro-orm/core';
-import { BaseEntity } from 'shared/database/base.entity';
+import { BaseEntity } from '../shared/database/base.entity';
 import { CannotBanAdminException } from './exceptions/cannot-ban-admin.exception';
 
 export const Role = {
