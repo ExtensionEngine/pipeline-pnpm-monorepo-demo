@@ -24,7 +24,7 @@ COPY ${APP_PATH}/package.json ./${APP_PATH}/
 FROM install AS build
 
 COPY ${APP_PATH}/tsconfig.json ${APP_PATH}/tsconfig.build.json ${APP_PATH}/nest-cli.json ./${APP_PATH}/
-COPY ${APP_PATH}/src ./${APP_PATH}/
+COPY ${APP_PATH}/src ./${APP_PATH}/src/
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter=${APP_NAME} --frozen-lockfile
 RUN pnpm --filter=${APP_NAME} run build
@@ -37,6 +37,9 @@ FROM build AS local
 WORKDIR /workspace/output
 
 COPY ${APP_PATH}/.env ./
+RUN chown -R node:node .
+
+USER node
 
 CMD ["node", "dist/main.js"]
 
