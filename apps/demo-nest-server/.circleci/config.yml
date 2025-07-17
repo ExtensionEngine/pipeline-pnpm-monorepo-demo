@@ -1,0 +1,32 @@
+version: 2.1
+
+orbs:
+  core: studion/core@3.0.1
+  rollout: studion/rollout@0.1.1
+  security: studion/security@3.1.1
+
+jobs:
+  lint_pr:
+    executor: core/node
+    steps:
+      - checkout
+      - core/install_dependencies
+      - core/run_script:
+          pkg_json_dir: ./apps/demo-nest-server
+          skip_install_dependencies: true
+          script: lint
+
+workflows:
+  inspect_changes:
+    when:
+      not: { equal: [master, <<pipeline.git.branch>>] }
+    jobs:
+      - lint_pr
+
+  build_and_push:
+    when:
+      equal: [master, <<pipeline.git.branch>>]
+    jobs:
+      - rollout/build_and_push_server_to_aws_ecr:
+          dockerfile_dir: ./apps/demo-nest-server
+          repo_name: monorepo-demo-server
