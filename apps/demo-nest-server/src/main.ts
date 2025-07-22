@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 
+const API_TOKEN = 'abc123cd768DF99z';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -10,8 +12,10 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   const port = config.get<number>('app.port')!;
 
+  console.log(API_TOKEN);
   app.enableShutdownHooks();
   app.setGlobalPrefix('/api');
+  app.enableCors({ origin: /\.gostudion\.com/ });
   app.useLogger(logger);
 
   await app.listen(port, () => {
