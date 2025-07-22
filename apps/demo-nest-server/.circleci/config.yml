@@ -15,6 +15,12 @@ jobs:
           pkg_json_dir: ./apps/demo-nest-server
           skip_install_dependencies: true
           script: lint
+  scan_pr:
+    executor: security/node
+    steps:
+      - checkout
+      - security/analyze_code
+      - security/detect_secrets
 
 workflows:
   inspect_changes:
@@ -22,6 +28,7 @@ workflows:
       not: { equal: [master, <<pipeline.git.branch>>] }
     jobs:
       - lint_pr
+      - scan_pr
 
   build_and_push:
     when:
