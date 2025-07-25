@@ -1,0 +1,8 @@
+config:
+  aws:region: eu-central-1
+  infra:container:
+    port: 3000
+    imageRepo: 064697537775.dkr.ecr.eu-central-1.amazonaws.com/monorepo-demo-server
+  infra:db:
+    name: devdb
+    user: devmonopg

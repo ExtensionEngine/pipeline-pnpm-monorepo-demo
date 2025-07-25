@@ -1,0 +1,6 @@
+name: demo-canary-server
+description: Infrastructure provisioning for demo server canary deployments
+runtime:
+  name: nodejs
+  options:
+    packagemanager: pnpm
