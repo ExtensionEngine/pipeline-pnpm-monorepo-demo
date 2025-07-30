@@ -12,6 +12,7 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
   app.setGlobalPrefix('/api');
+  app.enableCors({ origin: /\.gostudion\.com$/ });
   app.useLogger(logger);
 
   await app.listen(port, () => {
